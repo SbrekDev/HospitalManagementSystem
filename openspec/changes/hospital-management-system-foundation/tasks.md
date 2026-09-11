@@ -160,18 +160,18 @@ Chain strategy: feature-branch-chain with GitFlow feature branches into develop 
 
 ### T-050: Set up WPF shell and navigation
 **Module**: Infrastructure | **Type**: feature | **Estimation**: 8h | **PR**: 7
-- [ ] MVVM shell (CommunityToolkit), login view, role-driven nav, Api.Client DI; Spanish UI / English code
-- [ ] ViewModel test: nav items reflect granted permissions — **Related**: auth FR-002
+- [x] MVVM shell (CommunityToolkit), login view, role-driven nav, Api.Client DI; Spanish UI / English code
+- [x] ViewModel test: nav items reflect granted permissions — **Related**: auth FR-002
 
 ### T-051: PatientRegistry views
 **Module**: PatientRegistry | **Type**: feature | **Estimation**: 8h | **PR**: 7
-- [ ] Patient search, registration, coverage/guardian editing forms
-- [ ] ViewModel test: duplicate document shows 409 problem-detail message — **Related**: patient-registry FR-001…004
+- [x] Patient search, registration, coverage/guardian editing forms
+- [x] ViewModel test: duplicate document shows 409 problem-detail message — **Related**: patient-registry FR-001…004
 
 ### T-052: Scheduling views
 **Module**: Scheduling | **Type**: feature | **Estimation**: 10h | **PR**: 7
-- [ ] Agenda grid with slots, booking dialog with room/teleconsultation allocation, status actions
-- [ ] ViewModel test: full slot disables reserve; conflict shows reschedule prompt — **Related**: scheduling FR-001…004
+- [x] Agenda grid with slots, booking dialog with room/teleconsultation allocation, status actions
+- [x] ViewModel test: full slot disables reserve; conflict shows reschedule prompt — **Related**: scheduling FR-001…004
 
 ### T-053: ClinicalCare views
 **Module**: ClinicalCare | **Type**: feature | **Estimation**: 8h | **PR**: 8
