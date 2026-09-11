@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NoWarn>$(NoWarn);CA1707</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Application/SanatorioHMS.Application.Core/SanatorioHMS.Application.Core.csproj" />
+    <ProjectReference Include="../../src/Application/SanatorioHMS.Application.PatientRegistry/SanatorioHMS.Application.PatientRegistry.csproj" />
+    <ProjectReference Include="../../src/Application/SanatorioHMS.Application.Scheduling/SanatorioHMS.Application.Scheduling.csproj" />
+    <ProjectReference Include="../../src/Application/SanatorioHMS.Application.ClinicalCare/SanatorioHMS.Application.ClinicalCare.csproj" />
+    <ProjectReference Include="../../src/Application/SanatorioHMS.Application.Diagnostics/SanatorioHMS.Application.Diagnostics.csproj" />
+    <ProjectReference Include="../../src/Application/SanatorioHMS.Application.Auth/SanatorioHMS.Application.Auth.csproj" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+  </ItemGroup>
+</Project>

@@ -106,28 +106,28 @@ Chain strategy: feature-branch-chain with GitFlow feature branches into develop 
 
 ### T-030: PatientRegistry commands/queries
 **Module**: PatientRegistry | **Type**: feature | **Estimation**: 6h | **PR**: 5
-- [ ] Create/Update patient, Search (id/document/name/contact), history+coverage+guardian commands with FluentValidation handlers/DTOs
-- [ ] Test: validators reject spec edge inputs — **Related**: patient-registry FR-001…003, NFR-002
+ - [x] Create/Update patient, Search (id/document/name/contact), history+coverage+guardian commands with FluentValidation handlers/DTOs
+ - [x] Test: validators reject spec edge inputs — **Related**: patient-registry FR-001…003, NFR-002
 
 ### T-031: Scheduling commands/queries
 **Module**: Scheduling | **Type**: feature | **Estimation**: 8h | **PR**: 5
-- [ ] Agenda publish/query, Turn reserve/cancel/status-change commands; 409 mapping for slot conflict
-- [ ] Test: reservation emits `TurnBooked`; invalid status change rejected — **Related**: scheduling FR-001…004
+ - [x] Agenda publish/query, Turn reserve/cancel/status-change commands; 409 mapping for slot conflict
+ - [x] Test: reservation emits `TurnBooked`; invalid status change rejected — **Related**: scheduling FR-001…004
 
 ### T-032: ClinicalCare commands/queries
 **Module**: ClinicalCare | **Type**: feature | **Estimation**: 8h | **PR**: 5
-- [ ] Episode open/close, note append, order issue handlers
-- [ ] Test: closure blocked while requirements incomplete — **Related**: clinical-care FR-001…004
+ - [x] Episode open/close, note append, order issue handlers
+ - [x] Test: closure blocked while requirements incomplete — **Related**: clinical-care FR-001…004
 
 ### T-033: Diagnostics commands/queries
 **Module**: Diagnostics | **Type**: feature | **Estimation**: 6h | **PR**: 5
-- [ ] Order create, result register/validate, catalog query by specialty handlers
-- [ ] Test: processing blocked when authorization absent/denied (409 path) — **Related**: diagnostics FR-002…004
+ - [x] Order create, result register/validate, catalog query by specialty handlers
+ - [x] Test: processing blocked when authorization absent/denied (409 path) — **Related**: diagnostics FR-002…004
 
 ### T-034: Auth commands/queries
 **Module**: Auth | **Type**: feature | **Estimation**: 6h | **PR**: 5
-- [ ] Login/refresh/logout/me handlers; MediatR behavior ordering validation→authorization→audit
-- [ ] Test: unauthorized request denied without exposing protected data — **Related**: auth FR-001…003
+ - [x] Login/refresh/logout/me handlers; MediatR behavior ordering validation→authorization→audit
+ - [x] Test: unauthorized request denied without exposing protected data — **Related**: auth FR-001…003
 
 ## Phase 5: API Layer (WU-6)
 

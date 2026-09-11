@@ -41,3 +41,11 @@ public readonly record struct Result(bool IsSuccess, string? Error = null)
     public static Result Success() => new(true);
     public static Result Failure(string error) => new(false, error);
 }
+
+#pragma warning disable CA1000 // Result<T> uses the same ergonomic factory API as Result.
+public readonly record struct Result<T>(bool IsSuccess, T? Value = default, string? Error = null)
+{
+    public static Result<T> Success(T value) => new(true, value);
+    public static Result<T> Failure(string error) => new(false, default, error);
+}
+#pragma warning restore CA1000
