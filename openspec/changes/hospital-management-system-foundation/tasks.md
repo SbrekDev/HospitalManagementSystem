@@ -8,12 +8,12 @@
 | 400-line budget risk | High |
 | Chained PRs recommended | Yes |
 | Suggested split | 8 work units (PR 1 → PR 8); original 6-slice split exceeded budget at domain and WPF units |
-| Delivery strategy | ask-on-risk |
-| Chain strategy | pending — user must choose stacked-to-main vs feature-branch-chain before apply |
+| Delivery strategy | feature-branch-chain |
+| Chain strategy | feature-branch-chain with GitFlow feature branches into develop and releases to main |
 
 Decision needed before apply: Yes
 Chained PRs recommended: Yes
-Chain strategy: pending
+Chain strategy: feature-branch-chain with GitFlow feature branches into develop and releases to main
 400-line budget risk: High
 
 ### Suggested Work Units
@@ -72,13 +72,13 @@ Chain strategy: pending
 
 ### T-014: Implement Diagnostics domain entities
 **Module**: Diagnostics | **Type**: feature | **Estimation**: 6h | **PR**: 3
-- [ ] Versioned `Study` catalog (LOINC column, retired studies block new orders), `DiagnosticOrder` AR with `AuthorizationStatus` gate (Pending/Denied block processing), `DiagnosticResult` + validation/correction; events `DiagnosticOrderCreated`, `DiagnosticResultValidated`
-- [ ] Tests: denied authorization blocks fulfillment; result correction never overwrites original — **Related**: diagnostics FR-001…004, edges
+- [x] Versioned `Study` catalog (LOINC column, retired studies block new orders), `DiagnosticOrder` AR with `AuthorizationStatus` gate (Pending/Denied block processing), `DiagnosticResult` + validation/correction; events `DiagnosticOrderCreated`, `DiagnosticResultValidated`
+- [x] Tests: denied authorization blocks fulfillment; result correction never overwrites original — **Related**: diagnostics FR-001…004, edges
 
 ### T-015: Implement Auth domain entities
 **Module**: Auth | **Type**: feature | **Estimation**: 4h | **PR**: 3
-- [ ] `User`, `Role`, `Permission`, `RolePermission`, `UserRole`, `Session`, append-only hash-chained `AuditLog`; event `AuditRecorded`
-- [ ] Tests: audit hash chain links previous entry — **Related**: auth FR-002, FR-005, NFR-002
+- [x] `User`, `Role`, `Permission`, `RolePermission`, `UserRole`, `Session`, append-only hash-chained `AuditLog`; event `AuditRecorded`
+- [x] Tests: audit hash chain links previous entry — **Related**: auth FR-002, FR-005, NFR-002
 
 ## Phase 3: Infrastructure Layer (WU-4)
 

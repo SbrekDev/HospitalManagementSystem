@@ -26,4 +26,8 @@
     <ProjectReference Include="..\..\src\Domain\SanatorioHMS.Domain.ClinicalCare\SanatorioHMS.Domain.ClinicalCare.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../../src/Domain/SanatorioHMS.Domain.Diagnostics/SanatorioHMS.Domain.Diagnostics.csproj" />
+    <ProjectReference Include="../../src/Domain/SanatorioHMS.Domain.Auth/SanatorioHMS.Domain.Auth.csproj" />
+  </ItemGroup>
 </Project>
