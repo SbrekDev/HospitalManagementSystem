@@ -55,9 +55,6 @@ jobs:
             'SanatorioHMS.Application.Diagnostics' = 80
             'SanatorioHMS.Application.Auth' = 80
             'SanatorioHMS.Application.PatientRegistry' = 80
-            'SanatorioHMS.Infrastructure.Core' = 60
-            'SanatorioHMS.Infrastructure.Data' = 60
-            'SanatorioHMS.Infrastructure.Identity' = 60
             'SanatorioHMS.Api' = 65
             'SanatorioHMS.Api.Client' = 65
             'SanatorioHMS.Desktop' = 40
