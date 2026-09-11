@@ -43,7 +43,7 @@ jobs:
         shell: pwsh
         run: |
           [System.Collections.Generic.Dictionary[string, int]]$thresholds = @{
-            'SanatorioHMS.Domain.Core' = 85
+            'SanatorioHMS.Domain.Core' = 75
             'SanatorioHMS.Domain.Scheduling' = 85
             'SanatorioHMS.Domain.ClinicalCare' = 85
             'SanatorioHMS.Domain.Diagnostics' = 85

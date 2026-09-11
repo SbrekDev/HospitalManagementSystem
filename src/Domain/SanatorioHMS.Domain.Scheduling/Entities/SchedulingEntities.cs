@@ -64,6 +64,12 @@ public sealed class Agenda
     public ICollection<Turno> Turnos { get; set; } = new List<Turno>();
 
     public bool Contains(TimeOnly start, TimeOnly end) => start >= HoraInicio && end <= HoraFin && end > start;
+    public bool IsAvailable(TimeOnly start, TimeOnly end) => Contains(start, end) && !Turnos.Any(existing =>
+    {
+        var existingStart = TimeOnly.FromDateTime(existing.FechaHora);
+        var existingEnd = existingStart.AddMinutes(existing.DuracionMinutos);
+        return existingStart < end && start < existingEnd;
+    });
 }
 
 public sealed class Turno
