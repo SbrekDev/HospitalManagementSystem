@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SanatorioHMS.Api;
@@ -11,6 +12,7 @@ using SanatorioHMS.Application.Core;
 using SanatorioHMS.Application.Diagnostics;
 using SanatorioHMS.Application.PatientRegistry;
 using SanatorioHMS.Application.Scheduling;
+using SanatorioHMS.Domain.Auth.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
@@ -23,6 +25,7 @@ builder.Services.AddScoped<IClinicalCareRepository>(sp => sp.GetRequiredService<
 builder.Services.AddScoped<IDiagnosticsRepository>(sp => sp.GetRequiredService<InMemoryStore>());
 builder.Services.AddScoped<IUserAuthRepository>(sp => sp.GetRequiredService<InMemoryStore>());
 builder.Services.AddScoped<IUserCredentialService, ApiCredentialService>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IAuthTokenService, ApiTokenService>();
 builder.Services.AddScoped<SanatorioHMS.Application.Core.IAuthorizationService, RequestAuthorization>();
 builder.Services.AddMediatR(cfg =>

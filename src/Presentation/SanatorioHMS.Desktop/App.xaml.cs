@@ -18,7 +18,7 @@ public partial class App : System.Windows.Application
         var services = new ServiceCollection();
         services.AddHttpClient<HmsApiClient>(client =>
         {
-            client.BaseAddress = new Uri("https://localhost:5001/");
+            client.BaseAddress = new Uri("http://localhost:5000/");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         });
         services.AddSingleton<NavigationService>();
