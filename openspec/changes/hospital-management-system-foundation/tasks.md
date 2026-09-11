@@ -62,13 +62,13 @@ Chain strategy: pending
 
 ### T-012: Implement Scheduling domain entities
 **Module**: Scheduling | **Type**: feature | **Estimation**: 8h | **PR**: 2
-- [ ] `Agenda` AR (non-overlapping intervals), `Turn` AR with state machine Reserved→Confirmed→Attended / →Cancelled/NoShow; `Professional`, `Specialty`, `ProfessionalSpecialty`, `Room`; events `TurnBooked`, `TurnCancelled`
-- [ ] Tests: invalid transition rejected; room required in-person, destination required teleconsultation — **Related**: scheduling FR-001…004, edges
+- [x] `Agenda` AR (non-overlapping intervals), `Turn` AR with state machine Reserved→Confirmed→Attended / →Cancelled/NoShow; `Professional`, `Specialty`, `ProfessionalSpecialty`, `Room`; events `TurnBooked`, `TurnCancelled`
+- [x] Tests: invalid transition rejected; room required in-person, destination required teleconsultation — **Related**: scheduling FR-001…004, edges
 
 ### T-013: Implement ClinicalCare domain entities
 **Module**: ClinicalCare | **Type**: feature | **Estimation**: 8h | **PR**: 2
-- [ ] `Episode` AR (Active→Closed only when requirements met; edits after closure blocked), `Encounter`, append-only `ClinicalNote` (evolution/procedure), `Order` AR + `OrderItem` (Medication/Study/Procedure/Diet); event `EpisodeClosed`; corrections = traceable additions
-- [ ] Tests: closure guard; append-only enforcement; duplicate submission idempotence — **Related**: clinical-care FR-001…004, edges
+- [x] `Episode` AR (Active→Closed only when requirements met; edits after closure blocked), `Encounter`, append-only `ClinicalNote` (evolution/procedure), `Order` AR + `OrderItem` (Medication/Study/Procedure/Diet); event `EpisodeClosed`; corrections = traceable additions
+- [x] Tests: closure guard; append-only enforcement; duplicate submission idempotence — **Related**: clinical-care FR-001…004, edges
 
 ### T-014: Implement Diagnostics domain entities
 **Module**: Diagnostics | **Type**: feature | **Estimation**: 6h | **PR**: 3
