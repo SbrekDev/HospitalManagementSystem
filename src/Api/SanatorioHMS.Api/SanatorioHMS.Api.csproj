@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.31" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Application\SanatorioHMS.Application.PatientRegistry\SanatorioHMS.Application.PatientRegistry.csproj" />
+    <ProjectReference Include="..\..\Application\SanatorioHMS.Application.Scheduling\SanatorioHMS.Application.Scheduling.csproj" />
+    <ProjectReference Include="..\..\Application\SanatorioHMS.Application.ClinicalCare\SanatorioHMS.Application.ClinicalCare.csproj" />
+    <ProjectReference Include="..\..\Application\SanatorioHMS.Application.Diagnostics\SanatorioHMS.Application.Diagnostics.csproj" />
+    <ProjectReference Include="..\..\Application\SanatorioHMS.Application.Auth\SanatorioHMS.Application.Auth.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\SanatorioHMS.Infrastructure.Data\SanatorioHMS.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\SanatorioHMS.Infrastructure.Identity\SanatorioHMS.Infrastructure.Identity.csproj" />
+  </ItemGroup>
+
+</Project>

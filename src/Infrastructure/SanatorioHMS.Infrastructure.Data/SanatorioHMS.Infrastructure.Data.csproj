@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\SanatorioHMS.Infrastructure.Core\SanatorioHMS.Infrastructure.Core.csproj" />
+    <ProjectReference Include="..\..\Domain\SanatorioHMS.Domain.PatientRegistry\SanatorioHMS.Domain.PatientRegistry.csproj" />
+    <ProjectReference Include="..\..\Domain\SanatorioHMS.Domain.Scheduling\SanatorioHMS.Domain.Scheduling.csproj" />
+    <ProjectReference Include="..\..\Domain\SanatorioHMS.Domain.ClinicalCare\SanatorioHMS.Domain.ClinicalCare.csproj" />
+    <ProjectReference Include="..\..\Domain\SanatorioHMS.Domain.Diagnostics\SanatorioHMS.Domain.Diagnostics.csproj" />
+    <ProjectReference Include="..\..\Domain\SanatorioHMS.Domain.Auth\SanatorioHMS.Domain.Auth.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

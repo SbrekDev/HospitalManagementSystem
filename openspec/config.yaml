@@ -1,0 +1,59 @@
+project: hospitalmanagmentsystem
+artifact_store: hybrid
+language: en
+features:
+  strict_tdd: false
+  code_coverage_min: 80
+  review_budget_lines: 400
+
+context: |
+  Greenfield Hospital Management System. No source code on disk yet.
+  Stack declared by user (not yet detectable on disk):
+  - Backend: C# .NET 8, ASP.NET Core Web API
+  - Desktop: WPF (.NET 8)
+  - Database: SQL Server 2022
+  - ORM: Entity Framework Core 8
+  - Architecture: Clean Architecture + DDD + CQRS + MediatR
+  - CI/CD: GitHub Actions
+  Artifacts in English. User-facing language: Spanish.
+
+testing:
+  strict_tdd: false
+  runner:
+    framework: xUnit (declared, not on disk yet)
+    command: dotnet test (declared, no solution on disk yet)
+  layers:
+    unit: xUnit + Moq + FluentAssertions (declared)
+    integration: WebApplicationFactory (declared)
+    e2e: not declared
+  coverage:
+    target: 80
+    tool: coverlet (declared)
+  quality:
+    linter: dotnet format (declared)
+    type_checker: built-in (Roslyn compiler)
+    formatter: dotnet format (declared)
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Include sequence diagrams for complex flows
+    - Document architecture decisions with rationale
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+  apply:
+    guidelines:
+      - Follow Clean Architecture layering (Domain, Application, Infrastructure, Presentation)
+    tdd: false
+    test_command: dotnet test
+  verify:
+    test_command: dotnet test
+    build_command: dotnet build
+    coverage_threshold: 80
+  archive:
+    - Warn before merging destructive deltas
