@@ -20,6 +20,11 @@ public sealed class Patient : AggregateRoot<Guid>
         if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(surname)) throw new ArgumentException("Patient name is required.");
         return new Patient(Guid.NewGuid()) { Name = name.Trim(), Surname = surname.Trim(), DateOfBirth = dateOfBirth };
     }
+    public void Update(string name, string surname, DateOnly dateOfBirth)
+    {
+        if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(surname)) throw new ArgumentException("Patient name is required.");
+        Name = name.Trim(); Surname = surname.Trim(); DateOfBirth = dateOfBirth;
+    }
 }
 public sealed class PatientDocument { public Guid Id { get; set; } public Guid PatientId { get; set; } public Patient Patient { get; set; } = null!; public DocumentType DocumentType { get; set; } public string DocumentNumber { get; set; } = string.Empty; }
 public sealed class PatientContact { public Guid Id { get; set; } public Guid PatientId { get; set; } public Patient Patient { get; set; } = null!; public string Type { get; set; } = string.Empty; public string Value { get; set; } = string.Empty; }

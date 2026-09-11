@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanatorioHMS.IntegrationTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanatorioHMS.UnitTests", "..\tests\SanatorioHMS.UnitTests\SanatorioHMS.UnitTests.csproj", "{B663C0F2-6D46-4164-B7A0-7F51AD6D4816}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanatorioHMS.Application.Tests", "..\tests\SanatorioHMS.Application.Tests\SanatorioHMS.Application.Tests.csproj", "{472218E9-D0B3-4E22-B504-7C7629BFE377}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -317,6 +319,18 @@ Global
 		{B663C0F2-6D46-4164-B7A0-7F51AD6D4816}.Release|x64.Build.0 = Release|Any CPU
 		{B663C0F2-6D46-4164-B7A0-7F51AD6D4816}.Release|x86.ActiveCfg = Release|Any CPU
 		{B663C0F2-6D46-4164-B7A0-7F51AD6D4816}.Release|x86.Build.0 = Release|Any CPU
+		{472218E9-D0B3-4E22-B504-7C7629BFE377}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{472218E9-D0B3-4E22-B504-7C7629BFE377}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{472218E9-D0B3-4E22-B504-7C7629BFE377}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{472218E9-D0B3-4E22-B504-7C7629BFE377}.Debug|x64.Build.0 = Debug|Any CPU
+		{472218E9-D0B3-4E22-B504-7C7629BFE377}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{472218E9-D0B3-4E22-B504-7C7629BFE377}.Debug|x86.Build.0 = Debug|Any CPU
+		{472218E9-D0B3-4E22-B504-7C7629BFE377}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{472218E9-D0B3-4E22-B504-7C7629BFE377}.Release|Any CPU.Build.0 = Release|Any CPU
+		{472218E9-D0B3-4E22-B504-7C7629BFE377}.Release|x64.ActiveCfg = Release|Any CPU
+		{472218E9-D0B3-4E22-B504-7C7629BFE377}.Release|x64.Build.0 = Release|Any CPU
+		{472218E9-D0B3-4E22-B504-7C7629BFE377}.Release|x86.ActiveCfg = Release|Any CPU
+		{472218E9-D0B3-4E22-B504-7C7629BFE377}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
