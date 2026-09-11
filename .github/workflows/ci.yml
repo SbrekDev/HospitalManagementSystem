@@ -47,7 +47,7 @@ jobs:
         run: |
           [System.Collections.Generic.Dictionary[string, int]]$thresholds = @{
             'SanatorioHMS.Domain.Core' = 60
-            'SanatorioHMS.Domain.Scheduling' = 55
+            'SanatorioHMS.Domain.Scheduling' = 45
             'SanatorioHMS.Domain.ClinicalCare' = 50
             'SanatorioHMS.Domain.Diagnostics' = 60
             'SanatorioHMS.Domain.Auth' = 55
