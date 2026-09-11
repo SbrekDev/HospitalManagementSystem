@@ -1,5 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SanatorioHMS.Application.Auth;
+using SanatorioHMS.Application.ClinicalCare;
+using SanatorioHMS.Application.Diagnostics;
+using SanatorioHMS.Application.PatientRegistry;
+using SanatorioHMS.Application.Scheduling;
 using SanatorioHMS.Infrastructure.Core;
 
 namespace SanatorioHMS.Infrastructure.Data;
@@ -13,13 +18,13 @@ public static class InfrastructureRegistration
         services.AddDbContext<ClinicalCareDbContext>(o => o.UseSqlServer(connectionString));
         services.AddDbContext<DiagnosticsDbContext>(o => o.UseSqlServer(connectionString));
         services.AddDbContext<AuthDbContext>(o => o.UseSqlServer(connectionString));
-        services.AddScoped<IPatientRepository, PatientRepository>();
+        services.AddScoped<IPatientRegistryRepository, PatientRepository>();
         services.AddScoped<ISchedulingRepository, SchedulingRepository>();
         services.AddScoped<ITurnRepository, TurnRepository>();
         services.AddScoped<IClinicalCareRepository, ClinicalCareRepository>();
         services.AddScoped<IDiagnosticsRepository, DiagnosticsRepository>();
-        services.AddScoped<IAuthRepository, AuthRepository>();
-        services.AddScoped<IUnitOfWork, RequestUnitOfWork>();
+        services.AddScoped<IUserAuthRepository, AuthRepository>();
+        services.AddScoped<SanatorioHMS.Application.Core.IUnitOfWork, RequestUnitOfWork>();
         return services;
     }
 }
@@ -29,7 +34,7 @@ public sealed class RequestUnitOfWork(
     SchedulingDbContext scheduling,
     ClinicalCareDbContext clinical,
     DiagnosticsDbContext diagnostics,
-    AuthDbContext auth) : IUnitOfWork
+    AuthDbContext auth) : SanatorioHMS.Application.Core.IUnitOfWork
 {
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

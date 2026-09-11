@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -43,7 +44,11 @@ public partial class LoginViewModel(HmsApiClient api) : ObservableObject
             var permissions = new[] { "Patient.Read", "Patient.Create", "Patient.Update", "Scheduling.Read", "Scheduling.Reserve", "Scheduling.ChangeStatus" };
             LoggedIn?.Invoke(permissions);
         }
-        catch (ApiProblemException) { ErrorMessage = "Usuario o contraseña inválidos."; }
+        catch (ApiProblemException ex)
+        {
+            Debug.WriteLine($"HMS login failed with HTTP {ex.StatusCode}: {ex.Message}");
+            ErrorMessage = $"Error de inicio de sesión (HTTP {ex.StatusCode}): {ex.Message}";
+        }
         catch (HttpRequestException) { ErrorMessage = "No se pudo conectar con el servidor."; }
         finally { IsBusy = false; }
     }

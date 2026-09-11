@@ -23,9 +23,9 @@ public sealed record GetAvailableSlots(Guid AgendaId) : IRequest<Result<IReadOnl
 public sealed record GetTurnDetails(Guid TurnId) : IRequest<Result<TurnResponse>>, IRequirePermission { public string Permission => "Scheduling.Read"; }
 
 public interface ISchedulingRepository : IRepository<Agenda>
-{ Task<IReadOnlyList<DateTime>> GetAvailableSlotsAsync(Guid agendaId, CancellationToken ct = default); }
+{ Task<IReadOnlyList<Agenda>> GetAgendasAsync(CancellationToken ct = default); Task<IReadOnlyList<DateTime>> GetAvailableSlotsAsync(Guid agendaId, CancellationToken ct = default); }
 public interface ITurnRepository : IRepository<Turno>
-{ Task<Turno?> FindSlotAsync(Guid agendaId, DateTime start, CancellationToken ct = default); }
+{ Task<IReadOnlyList<Turno>> GetTurnsAsync(CancellationToken ct = default); Task<Turno?> FindSlotAsync(Guid agendaId, DateTime start, CancellationToken ct = default); }
 public sealed record TurnBookedNotification(TurnBooked Event) : INotification;
 
 public sealed class ReserveTurnValidator : AbstractValidator<ReserveTurn>

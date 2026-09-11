@@ -1,4 +1,6 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using SanatorioHMS.Api.Client;
@@ -18,8 +20,13 @@ public partial class App : System.Windows.Application
         var services = new ServiceCollection();
         services.AddHttpClient<HmsApiClient>(client =>
         {
-            client.BaseAddress = new Uri("https://localhost:5001/");
+            client.BaseAddress = new Uri("http://localhost:5150/");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        }).ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+        {
+            UseProxy = false,
+            AutomaticDecompression = DecompressionMethods.All,
+            PooledConnectionIdleTimeout = TimeSpan.FromMinutes(2)
         });
         services.AddSingleton<NavigationService>();
         services.AddTransient<LoginViewModel>();
