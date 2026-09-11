@@ -3,11 +3,13 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <NoWarn>$(NoWarn);CA1001;CA1725;CA1861</NoWarn>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.31" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -24,6 +26,7 @@
     <ProjectReference Include="..\..\Application\SanatorioHMS.Application.Auth\SanatorioHMS.Application.Auth.csproj" />
     <ProjectReference Include="..\..\Infrastructure\SanatorioHMS.Infrastructure.Data\SanatorioHMS.Infrastructure.Data.csproj" />
     <ProjectReference Include="..\..\Infrastructure\SanatorioHMS.Infrastructure.Identity\SanatorioHMS.Infrastructure.Identity.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\SanatorioHMS.Infrastructure.Core\SanatorioHMS.Infrastructure.Core.csproj" />
   </ItemGroup>
 
 </Project>

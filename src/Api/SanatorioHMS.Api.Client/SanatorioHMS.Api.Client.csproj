@@ -2,6 +2,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Application\SanatorioHMS.Application.Core\SanatorioHMS.Application.Core.csproj" />
+    <ProjectReference Include="..\..\Application\SanatorioHMS.Application.Auth\SanatorioHMS.Application.Auth.csproj" />
+    <ProjectReference Include="..\..\Application\SanatorioHMS.Application.PatientRegistry\SanatorioHMS.Application.PatientRegistry.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
