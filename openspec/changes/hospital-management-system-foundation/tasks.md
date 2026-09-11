@@ -175,13 +175,13 @@ Chain strategy: feature-branch-chain with GitFlow feature branches into develop 
 
 ### T-053: ClinicalCare views
 **Module**: ClinicalCare | **Type**: feature | **Estimation**: 8h | **PR**: 8
-- [ ] Episode workspace: notes (evolution/procedure), order entry, closure action
-- [ ] ViewModel test: closed episode disables edit — **Related**: clinical-care FR-002…004
+- [x] Episode workspace: notes (evolution/procedure), order entry, closure action
+- [x] ViewModel test: closed episode disables edit — **Related**: clinical-care FR-002…004
 
 ### T-054: Diagnostics views
 **Module**: Diagnostics | **Type**: feature | **Estimation**: 8h | **PR**: 8
-- [ ] Order creation w/ prep instructions, LabTech result registration, doctor validation screen
-- [ ] ViewModel test: Pending/Denied authorization disables fulfillment with reason — **Related**: diagnostics FR-002…004
+- [x] Order creation w/ prep instructions, LabTech result registration, doctor validation screen
+- [x] ViewModel test: Pending/Denied authorization disables fulfillment with reason — **Related**: diagnostics FR-002…004
 
 ## Phase 7: Testing & Verification (WU-8)
 

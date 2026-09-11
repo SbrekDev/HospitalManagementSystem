@@ -1,5 +1,7 @@
 using System.Net.Http.Json;
 using SanatorioHMS.Application.Auth;
+using SanatorioHMS.Application.ClinicalCare;
+using SanatorioHMS.Application.Diagnostics;
 using SanatorioHMS.Application.PatientRegistry;
 using SanatorioHMS.Application.Scheduling;
 
@@ -15,6 +17,16 @@ public sealed class HmsApiClient(HttpClient http)
     public Task<IReadOnlyList<TurnResponse>?> GetTurnsAsync(CancellationToken ct = default) => http.GetFromJsonAsync<IReadOnlyList<TurnResponse>>("api/v1/turns", ct);
     public Task<TurnResponse?> ReserveTurnAsync(ReserveTurnRequest request, CancellationToken ct = default) => PostAsync<ReserveTurnRequest, TurnResponse>("api/v1/turns", request, ct);
     public Task<HttpResponseMessage> ChangeTurnStatusAsync(Guid id, ChangeTurnStatusRequest request, CancellationToken ct = default) => PutAsync($"api/v1/turns/{id}/status", request, ct);
+    public Task<EpisodeResponse?> GetEpisodeAsync(Guid id, CancellationToken ct = default) => GetAsync<EpisodeResponse>($"api/v1/episodes/{id}", ct);
+    public Task<IReadOnlyList<OrderResponse>?> GetEpisodeOrdersAsync(Guid id, CancellationToken ct = default) => GetAsync<IReadOnlyList<OrderResponse>>($"api/v1/episodes/{id}/orders", ct);
+    public Task<EpisodeResponse?> OpenEpisodeAsync(OpenEpisodeRequest request, CancellationToken ct = default) => PostAsync<OpenEpisodeRequest, EpisodeResponse>("api/v1/episodes", request, ct);
+    public async Task<Guid?> AppendClinicalNoteAsync(Guid episodeId, AppendClinicalNoteRequest request, CancellationToken ct = default) => await PostAsync<AppendClinicalNoteRequest, Guid>($"api/v1/episodes/{episodeId}/notes", request, ct);
+    public Task<OrderResponse?> IssueOrderAsync(Guid episodeId, IssueOrderRequest request, CancellationToken ct = default) => PostAsync<IssueOrderRequest, OrderResponse>($"api/v1/episodes/{episodeId}/orders", request, ct);
+    public Task<HttpResponseMessage> CloseEpisodeAsync(Guid id, CancellationToken ct = default) => PutAsync($"api/v1/episodes/{id}/close", new { }, ct);
+    public Task<IReadOnlyList<StudyResponse>?> GetStudiesAsync(string? search = null, CancellationToken ct = default) => GetAsync<IReadOnlyList<StudyResponse>>($"api/v1/studies?q={Uri.EscapeDataString(search ?? string.Empty)}", ct);
+    public Task<DiagnosticOrderResponse?> CreateDiagnosticOrderAsync(CreateDiagnosticOrderRequest request, CancellationToken ct = default) => PostAsync<CreateDiagnosticOrderRequest, DiagnosticOrderResponse>("api/v1/diagnostic-orders", request, ct);
+    public Task<DiagnosticResultResponse?> RegisterDiagnosticResultAsync(RegisterDiagnosticResultRequest request, CancellationToken ct = default) => PostAsync<RegisterDiagnosticResultRequest, DiagnosticResultResponse>("api/v1/results", request, ct);
+    public Task<HttpResponseMessage> ValidateDiagnosticResultAsync(Guid id, ValidateDiagnosticResultRequest request, CancellationToken ct = default) => PutAsync($"api/v1/results/{id}/validate", request, ct);
     public Task<T?> GetAsync<T>(string path, CancellationToken ct = default) => http.GetFromJsonAsync<T>(path, ct);
     public async Task<HttpResponseMessage> PutAsync<T>(string path, T request, CancellationToken ct = default) => await http.PutAsJsonAsync(path, request, ct);
     private async Task<TResponse?> PostAsync<TRequest, TResponse>(string path, TRequest request, CancellationToken ct)
