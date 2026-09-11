@@ -43,15 +43,16 @@ public partial class LoginViewModel(HmsApiClient api) : ObservableObject
             var permissions = new[] { "Patient.Read", "Patient.Create", "Patient.Update", "Scheduling.Read", "Scheduling.Reserve", "Scheduling.ChangeStatus" };
             LoggedIn?.Invoke(permissions);
         }
+        catch (ApiProblemException) { ErrorMessage = "Usuario o contraseña inválidos."; }
         catch (HttpRequestException) { ErrorMessage = "No se pudo conectar con el servidor."; }
         finally { IsBusy = false; }
     }
 }
 
-public partial class ShellViewModel : ObservableObject
+public partial class ShellViewModel(IServiceProvider services) : ObservableObject
 {
     public ObservableCollection<NavigationItem> NavigationItems { get; } = new();
     [ObservableProperty] private object? currentView;
     public void Initialize(IEnumerable<string> permissions) { NavigationItems.Clear(); foreach (var item in NavigationService.BuildMenu(permissions)) NavigationItems.Add(item); if (NavigationItems.Count > 0) Navigate(NavigationItems[0]); }
-    [RelayCommand] private void Navigate(NavigationItem item) => CurrentView = Activator.CreateInstance(item.ViewModelType);
+    [RelayCommand] private void Navigate(NavigationItem item) => CurrentView = services.GetService(item.ViewModelType) ?? throw new InvalidOperationException($"No view model registered for {item.ViewModelType.Name}.");
 }

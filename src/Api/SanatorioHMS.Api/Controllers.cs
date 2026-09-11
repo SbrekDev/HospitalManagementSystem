@@ -20,7 +20,7 @@ public abstract class ApiControllerBase : ControllerBase
     protected IActionResult Reply<T>(SanatorioHMS.Domain.Core.Result<T> result, string? location = null)
     {
         if (result.IsSuccess) return location is null ? Ok(result.Value) : Created(location, result.Value);
-        var status = result.Error?.Contains("not found", StringComparison.OrdinalIgnoreCase) == true ? 404 : result.Error?.Contains("conflict", StringComparison.OrdinalIgnoreCase) == true || result.Error?.Contains("already exists", StringComparison.OrdinalIgnoreCase) == true ? 409 : result.Error?.Contains("Unauthorized", StringComparison.OrdinalIgnoreCase) == true || result.Error?.Contains("Invalid credentials", StringComparison.OrdinalIgnoreCase) == true ? 401 : 400;
+        var status = result.Error?.Contains("not found", StringComparison.OrdinalIgnoreCase) == true ? 404 : result.Error?.Contains("conflict", StringComparison.OrdinalIgnoreCase) == true || result.Error?.Contains("already exists", StringComparison.OrdinalIgnoreCase) == true ? 409 : result.Error?.Contains("Unauthorized", StringComparison.OrdinalIgnoreCase) == true || result.Error?.Contains("Invalid credentials", StringComparison.OrdinalIgnoreCase) == true || result.Error?.Contains("Invalid refresh token", StringComparison.OrdinalIgnoreCase) == true ? 401 : 400;
         return Problem(statusCode: status, title: status == 409 ? "Conflict" : "Request failed", detail: result.Error, type: $"https://httpstatuses.com/{status}");
     }
 }

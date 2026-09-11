@@ -187,16 +187,16 @@ Chain strategy: feature-branch-chain with GitFlow feature branches into develop 
 
 ### T-060: Unit tests for Domain layer
 **Module**: Infrastructure | **Type**: chore | **Estimation**: 6h | **PR**: 8
-- [ ] Turn state machine, Order authorization gate, Episode closure rules, audit hash chain ≥90% on Domain
+- [ ] Turn state machine, Order authorization gate, Episode closure rules, audit hash chain ≥90% on Domain (tests added; threshold still needs verification)
 
 ### T-061: Unit tests for Application layer
 **Module**: Infrastructure | **Type**: chore | **Estimation**: 6h | **PR**: 8
-- [ ] All handlers happy + failure paths with Moq; validator rule coverage per spec edge cases
+- [ ] All handlers happy + failure paths with Moq; validator rule coverage per spec edge cases (coverage still below full handler target)
 
 ### T-062: Integration tests for API
 **Module**: Infrastructure | **Type**: chore | **Estimation**: 6h | **PR**: 8
-- [ ] WebApplicationFactory: status-code matrix (201/200/204/400/401/403/404/409), RBAC per role, audit emission, concurrent-booking 409
+- [ ] WebApplicationFactory: status-code matrix (201/200/400/401/404/409), authenticated role matrix, concurrent-booking 409; 204/403/audit remain unavailable in the current API surface
 
 ### T-063: WPF view model tests and coverage gate
 **Module**: Infrastructure | **Type**: chore | **Estimation**: 4h | **PR**: 8
-- [ ] ViewModel tests for all views; total coverage ≥80% enforced in CI; success criteria checklist from proposal verified
+- [ ] ViewModel tests for all views; Desktop test project is included in the solution and coverage collection (coverage gate still below 80%)

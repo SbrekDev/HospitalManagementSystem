@@ -44,7 +44,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import glob, sys, xml.etree.ElementTree as ET
-          files = glob.glob('TestResults/**/coverage.cobertura.xml', recursive=True)
+          files = glob.glob('**/coverage.cobertura.xml', recursive=True)
           if not files:
               print('No Cobertura report found', file=sys.stderr); sys.exit(1)
           covered = total = 0
