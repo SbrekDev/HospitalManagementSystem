@@ -133,28 +133,28 @@ Chain strategy: feature-branch-chain with GitFlow feature branches into develop 
 
 ### T-040: PatientRegistry controller
 **Module**: PatientRegistry | **Type**: feature | **Estimation**: 4h | **PR**: 6
-- [ ] `GET/POST/PUT /api/v1/patients`, `GET /patients/{id}`, `GET /patients/search`; RFC 7807 problem details
-- [ ] Integration test: duplicate document → 409 with existing id hint — **Related**: patient-registry FR-002, edge
+- [x] `GET/POST/PUT /api/v1/patients`, `GET /patients/{id}`, `GET /patients/search`; RFC 7807 problem details
+- [x] Integration test: duplicate document → 409 with existing id hint — **Related**: patient-registry FR-002, edge
 
 ### T-041: Scheduling controller
 **Module**: Scheduling | **Type**: feature | **Estimation**: 5h | **PR**: 6
-- [ ] `GET/POST /agendas`, `GET/POST /turns`, `PUT /turns/{id}/status`
-- [ ] Integration test: concurrent booking race → one 201, rest 409 — **Related**: scheduling NFR-001, edge
+- [x] `GET/POST /agendas`, `GET/POST /turns`, `PUT /turns/{id}/status`
+- [x] Integration test: concurrent booking race → one 201, rest 409 — **Related**: scheduling NFR-001, edge
 
 ### T-042: ClinicalCare controller
 **Module**: ClinicalCare | **Type**: feature | **Estimation**: 5h | **PR**: 6
-- [ ] `GET/POST /episodes`, `/encounters`, `/orders`
-- [ ] Integration test: edit closed episode → 403/409 — **Related**: clinical-care FR-004
+- [x] `GET/POST /episodes`, `/encounters`, `/orders`
+- [x] Integration test: edit closed episode → 403/409 — **Related**: clinical-care FR-004
 
 ### T-043: Diagnostics controller
 **Module**: Diagnostics | **Type**: feature | **Estimation**: 5h | **PR**: 6
-- [ ] `GET/POST /diagnostic-orders`, `GET /studies`, `POST /results`
-- [ ] Integration test: unvalidated vs validated result distinction — **Related**: diagnostics FR-001, FR-004
+- [x] `GET/POST /diagnostic-orders`, `GET /studies`, `POST /results`
+- [x] Integration test: unvalidated vs validated result distinction — **Related**: diagnostics FR-001, FR-004
 
 ### T-044: Auth controller
 **Module**: Auth | **Type**: feature | **Estimation**: 6h | **PR**: 6
-- [ ] `POST /auth/login|refresh`, `GET /auth/me`; `[Authorize(Policy)]` per endpoint; `SanatorioHMS.Api.Client` typed client
-- [ ] Integration test: 401/403 matrix per role; invalid credentials never leak existence — **Related**: auth FR-001…003, edges
+- [x] `POST /auth/login|refresh`, `GET /auth/me`; `[Authorize(Policy)]` per endpoint; `SanatorioHMS.Api.Client` typed client
+- [x] Integration test: 401/403 matrix per role; invalid credentials never leak existence — **Related**: auth FR-001…003, edges
 
 ## Phase 6: WPF Desktop Application (WU-7, WU-8)
 
