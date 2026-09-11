@@ -1,6 +1,7 @@
 using SanatorioHMS.Domain.Auth.Entities;
 using SanatorioHMS.Domain.Core;
 using SanatorioHMS.Domain.Diagnostics.Entities;
+using SanatorioHMS.Domain.ClinicalCare.Entities;
 using SanatorioHMS.Domain.PatientRegistry.Entities;
 using SanatorioHMS.Domain.Scheduling.Entities;
 
@@ -75,6 +76,26 @@ public sealed class DomainCoverageTests
     }
 
     [Fact]
+    public void EpisodeClosureRequiresCompleteOrdersAndBlocksFurtherEdits()
+    {
+        var episode = new Episode { Id = Guid.NewGuid(), Estado = "Activo" };
+        episode.Encounters.Add(new Encounter { Id = Guid.NewGuid(), EpisodioId = episode.Id, Tipo = "Consulta" });
+        Assert.Throws<InvalidOperationException>(() => episode.Close(DateTime.UtcNow, requirementsSatisfied: false));
+        Assert.Equal("Activo", episode.Estado);
+
+        episode.Close(DateTime.UtcNow, requirementsSatisfied: true);
+        Assert.Equal("Cerrado", episode.Estado);
+        Assert.Throws<InvalidOperationException>(() => episode.AddClinicalNote(new ClinicalNote
+        {
+            Id = Guid.NewGuid(),
+            EpisodioId = episode.Id,
+            TipoNota = "Evolucion",
+            Contenido = "Late edit"
+        }));
+        Assert.Throws<InvalidOperationException>(() => episode.Close(DateTime.UtcNow, requirementsSatisfied: true));
+    }
+
+    [Fact]
     public void StudyVersionsAndRetirementAreEnforced()
     {
         var study = Study.Create(" L1 ", " Blood ", StudyModality.Laboratory, preparationInstructions: "Fasting");
@@ -126,12 +147,47 @@ public sealed class DomainCoverageTests
     }
 
     [Fact]
+    public void AuthRelationshipsAndPasswordRulesAreCovered()
+    {
+        var user = new User(Guid.NewGuid(), "staff");
+        var role = new Role(Guid.NewGuid(), "Nurse");
+        var permission = new Permission(Guid.NewGuid(), "Clinical.Read");
+        role.Permissions.Add(new RolePermission(role.Id, permission.Id));
+        user.SetPasswordHash("hash");
+
+        Assert.Equal("hash", user.PasswordHash);
+        Assert.Single(role.Permissions);
+        Assert.Throws<ArgumentNullException>(() => user.SetPasswordHash(null!));
+        Assert.Equal(new UserRole(user.Id, role.Id), new UserRole(user.Id, role.Id));
+    }
+
+    [Fact]
+    public void SessionsInvalidateWhenExpiredOrRevokedAndRotateTheirToken()
+    {
+        var userId = Guid.NewGuid();
+        var now = DateTime.UtcNow;
+        var expired = new Session(Guid.NewGuid(), userId, now.AddSeconds(-1), "expired");
+        var active = new Session(Guid.NewGuid(), userId, now.AddMinutes(5), "old");
+
+        Assert.False(expired.IsValid(now));
+        Assert.True(active.IsValid(now));
+        active.Rotate("new", now.AddMinutes(10));
+        Assert.Equal("new", active.RefreshTokenHash);
+        active.Revoke();
+        Assert.False(active.IsValid(now));
+    }
+
+    [Fact]
     public void AuditChainAndAggregateEventsAreConsumable()
     {
         var first = AuditLog.Record(null, "Create", "Patient", "Success");
         var second = AuditLog.Record(Guid.NewGuid(), "Update", "Patient", "Success", first.Hash);
+        var third = AuditLog.Record(Guid.NewGuid(), "Read", "Patient", "Success", second.Hash);
         Assert.True(second.LinksTo(first));
-        Assert.False(second.LinksTo(AuditLog.Record(null, "Other", "Patient", "Success")));
+        Assert.True(third.LinksTo(second));
+        Assert.Equal(first.Hash, second.PreviousHash);
+        Assert.Equal(second.Hash, third.PreviousHash);
+        Assert.False(third.LinksTo(AuditLog.Record(null, "Other", "Patient", "Success")));
         Assert.Single(first.DomainEvents);
         Assert.Single(first.DequeueDomainEvents());
         Assert.Empty(first.DomainEvents);
@@ -150,5 +206,51 @@ public sealed class DomainCoverageTests
         Assert.Equal(first, new PairValue("x", 1));
         Assert.NotEqual(first, new PairValue("x", 2));
         Assert.Equal(first.GetHashCode(), new PairValue("x", 1).GetHashCode());
+    }
+
+    [Fact]
+    public void EntitiesCompareByTypeAndIdentifier()
+    {
+        var id = Guid.NewGuid();
+        var first = new Role(id, "Doctor");
+        var sameIdentity = new Role(id, "Renamed Doctor");
+        var differentIdentity = new Role(Guid.NewGuid(), "Doctor");
+
+        Assert.Equal(first, sameIdentity);
+        Assert.Equal(first.GetHashCode(), sameIdentity.GetHashCode());
+        Assert.NotEqual(first, differentIdentity);
+        Assert.False(first.Equals((object)new Permission(id, "Doctor.Read")));
+    }
+
+    [Fact]
+    public void ResultsRepresentSuccessAndFailure()
+    {
+        var success = Result.Success();
+        var failure = Result.Failure("invalid");
+        var valueSuccess = Result<int>.Success(42);
+        var valueFailure = Result<int>.Failure("missing");
+
+        Assert.True(success.IsSuccess);
+        Assert.False(failure.IsSuccess);
+        Assert.Equal("invalid", failure.Error);
+        Assert.True(valueSuccess.IsSuccess);
+        Assert.Equal(42, valueSuccess.Value);
+        Assert.False(valueFailure.IsSuccess);
+        Assert.Equal("missing", valueFailure.Error);
+    }
+
+    [Fact]
+    public void AgendaRejectsOverlappingIntervalsButAllowsAdjacentIntervals()
+    {
+        var agenda = new Agenda { HoraInicio = new(8, 0), HoraFin = new(18, 0) };
+        agenda.Turnos.Add(new Turno
+        {
+            FechaHora = new DateTime(2026, 9, 11, 9, 0, 0),
+            DuracionMinutos = 30
+        });
+
+        Assert.False(agenda.IsAvailable(new(9, 15), new(9, 45)));
+        Assert.True(agenda.IsAvailable(new(9, 30), new(10, 0)));
+        Assert.False(agenda.IsAvailable(new(7, 0), new(7, 30)));
     }
 }

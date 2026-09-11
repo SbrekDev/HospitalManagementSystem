@@ -47,7 +47,7 @@ public sealed class ReserveTurnHandler(ISchedulingRepository agendas, ITurnRepos
 {
     public async Task<Result<TurnResponse>> Handle(ReserveTurn r, CancellationToken ct)
     {
-        var agenda = await agendas.GetByIdAsync(r.Data.AgendaId, ct); if (agenda is null || !agenda.Activo || !agenda.Contains(TimeOnly.FromDateTime(r.Data.Start), TimeOnly.FromDateTime(r.Data.Start.AddMinutes(agenda.DuracionTurnoMinutos)))) return Result<TurnResponse>.Failure("Slot is not available.");
+        var agenda = await agendas.GetByIdAsync(r.Data.AgendaId, ct); if (agenda is null || !agenda.Activo || !agenda.IsAvailable(TimeOnly.FromDateTime(r.Data.Start), TimeOnly.FromDateTime(r.Data.Start.AddMinutes(agenda.DuracionTurnoMinutos)))) return Result<TurnResponse>.Failure("Slot is not available.");
         if (await turns.FindSlotAsync(r.Data.AgendaId, r.Data.Start, ct) is not null) return Result<TurnResponse>.Failure("Slot conflict.");
         var turn = new Turno { Id = Guid.NewGuid(), AgendaId = agenda.Id, PacienteId = r.Data.PatientId, FechaHora = r.Data.Start, DuracionMinutos = agenda.DuracionTurnoMinutos, Tipo = r.Data.Modality, SalaId = r.Data.RoomId, DestinoTeleconsulta = r.Data.TeleconsultationDestination, MotivoConsulta = r.Data.Reason, Estado = "Reservado", CreatedAt = DateTime.UtcNow }; turn.ValidateAllocation(); await turns.AddAsync(turn, ct); await publisher.Publish(new TurnBookedNotification(new TurnBooked(turn.Id, turn.PacienteId, DateTime.UtcNow)), ct); return Result<TurnResponse>.Success(ToResponse(turn));
     }
