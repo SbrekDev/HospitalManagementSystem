@@ -13,7 +13,8 @@ public sealed record NavigationItem(string Title, string Permission, Type ViewMo
 
 public sealed class NavigationService
 {
-    public static IReadOnlyList<NavigationItem> BuildMenu(IEnumerable<string> permissions) {
+    public static IReadOnlyList<NavigationItem> BuildMenu(IEnumerable<string> permissions)
+    {
         var granted = permissions.ToHashSet(StringComparer.OrdinalIgnoreCase);
         return new[] {
             new NavigationItem("Pacientes", "Patient.Read", typeof(PatientSearchViewModel)),
@@ -35,12 +36,14 @@ public partial class LoginViewModel(HmsApiClient api) : ObservableObject
     private async Task LoginAsync()
     {
         IsBusy = true; ErrorMessage = string.Empty;
-        try {
+        try
+        {
             var response = await api.LoginAsync(new LoginRequest(Username, Password));
             if (response is null) { ErrorMessage = "Usuario o contraseña inválidos."; return; }
             var permissions = new[] { "Patient.Read", "Patient.Create", "Patient.Update", "Scheduling.Read", "Scheduling.Reserve", "Scheduling.ChangeStatus" };
             LoggedIn?.Invoke(permissions);
-        } catch (HttpRequestException) { ErrorMessage = "No se pudo conectar con el servidor."; }
+        }
+        catch (HttpRequestException) { ErrorMessage = "No se pudo conectar con el servidor."; }
         finally { IsBusy = false; }
     }
 }
