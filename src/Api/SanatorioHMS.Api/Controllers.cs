@@ -36,26 +36,26 @@ public sealed class PatientsController(IMediator mediator) : ApiControllerBase(m
 }
 
 [Route("api/v1/agendas")]
-public sealed class AgendasController(IMediator mediator, InMemoryStore store) : ApiControllerBase(mediator)
+public sealed class AgendasController(IMediator mediator, ISchedulingRepository repository) : ApiControllerBase(mediator)
 {
-    [HttpGet] public IActionResult List() => Ok(store.Agendas);
+    [HttpGet] public async Task<IActionResult> List() => Ok(await repository.GetAgendasAsync());
     [HttpGet("{id:guid}")] public async Task<IActionResult> Get(Guid id) => Reply(await Mediator.Send(new GetAgenda(id)));
     [HttpPost] public async Task<IActionResult> Publish(PublishAgendaRequest request) => Reply(await Mediator.Send(new PublishAgenda(request)), $"/api/v1/agendas/{request.AgendaId}");
 }
 
 [Route("api/v1/turns")]
-public sealed class TurnsController(IMediator mediator, InMemoryStore store) : ApiControllerBase(mediator)
+public sealed class TurnsController(IMediator mediator, ITurnRepository repository) : ApiControllerBase(mediator)
 {
-    [HttpGet] public IActionResult List() => Ok(store.Turns);
+    [HttpGet] public async Task<IActionResult> List() => Ok(await repository.GetTurnsAsync());
     [HttpGet("{id:guid}")] public async Task<IActionResult> Get(Guid id) => Reply(await Mediator.Send(new GetTurnDetails(id)));
     [HttpPost] public async Task<IActionResult> Reserve(ReserveTurnRequest request) => Reply(await Mediator.Send(new ReserveTurn(request)), "/api/v1/turns");
     [HttpPut("{id:guid}/status")] public async Task<IActionResult> Status(Guid id, ChangeTurnStatusRequest request) => Reply(await Mediator.Send(new ChangeTurnStatus(request with { TurnId = id })));
 }
 
 [Route("api/v1/episodes")]
-public sealed class EpisodesController(IMediator mediator, InMemoryStore store) : ApiControllerBase(mediator)
+public sealed class EpisodesController(IMediator mediator, IClinicalCareRepository repository) : ApiControllerBase(mediator)
 {
-    [HttpGet] public IActionResult List() => Ok(store.Episodes);
+    [HttpGet] public async Task<IActionResult> List() => Ok(await repository.GetEpisodesAsync());
     [HttpGet("{id:guid}")] public async Task<IActionResult> Get(Guid id) => Reply(await Mediator.Send(new GetEpisode(id)));
     [HttpPost] public async Task<IActionResult> Open(OpenEpisodeRequest request) => Reply(await Mediator.Send(new OpenEpisode(request)), "/api/v1/episodes");
     [HttpPut("{id:guid}/close")] public async Task<IActionResult> Close(Guid id) => Reply(await Mediator.Send(new CloseEpisode(new CloseEpisodeRequest(id))));

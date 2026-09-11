@@ -66,17 +66,20 @@ public sealed class InMemoryStore : IPatientRegistryRepository, ISchedulingRepos
 
     Task<Agenda?> IRepository<Agenda>.GetByIdAsync(object id, CancellationToken ct) => Task.FromResult(agendas.TryGetValue((Guid)id, out var value) ? value : null);
     public Task AddAsync(Agenda entity, CancellationToken ct = default) { agendas[entity.Id] = entity; return Task.CompletedTask; }
+    public Task<IReadOnlyList<Agenda>> GetAgendasAsync(CancellationToken ct = default) => Task.FromResult<IReadOnlyList<Agenda>>(agendas.Values.ToArray());
     public void Update(Agenda entity) => agendas[entity.Id] = entity;
     public void Remove(Agenda entity) => agendas.TryRemove(entity.Id, out _);
     public Task<IReadOnlyList<DateTime>> GetAvailableSlotsAsync(Guid id, CancellationToken ct = default) => Task.FromResult<IReadOnlyList<DateTime>>(Array.Empty<DateTime>());
     Task<Turno?> IRepository<Turno>.GetByIdAsync(object id, CancellationToken ct) => Task.FromResult(turns.TryGetValue((Guid)id, out var value) ? value : null);
     public Task AddAsync(Turno entity, CancellationToken ct = default) { turns[entity.Id] = entity; bookingLock.Release(); return Task.CompletedTask; }
+    public Task<IReadOnlyList<Turno>> GetTurnsAsync(CancellationToken ct = default) => Task.FromResult<IReadOnlyList<Turno>>(turns.Values.ToArray());
     public void Update(Turno entity) => turns[entity.Id] = entity;
     public void Remove(Turno entity) => turns.TryRemove(entity.Id, out _);
     public async Task<Turno?> FindSlotAsync(Guid agendaId, DateTime start, CancellationToken ct = default) { await bookingLock.WaitAsync(ct); var found = turns.Values.FirstOrDefault(x => x.AgendaId == agendaId && x.FechaHora == start && x.Estado is not "Cancelado" and not "NoAsistio"); if (found is not null) bookingLock.Release(); return found; }
 
     Task<Episode?> IRepository<Episode>.GetByIdAsync(object id, CancellationToken ct) => Task.FromResult(episodes.TryGetValue((Guid)id, out var value) ? value : null);
     public Task AddAsync(Episode entity, CancellationToken ct = default) { episodes[entity.Id] = entity; return Task.CompletedTask; }
+    public Task<IReadOnlyList<Episode>> GetEpisodesAsync(CancellationToken ct = default) => Task.FromResult<IReadOnlyList<Episode>>(episodes.Values.ToArray());
     public void Update(Episode entity) => episodes[entity.Id] = entity;
     public void Remove(Episode entity) => episodes.TryRemove(entity.Id, out _);
     public Task<IReadOnlyList<Encounter>> GetEncountersAsync(Guid id, CancellationToken ct = default) => Task.FromResult<IReadOnlyList<Encounter>>(episodes.TryGetValue(id, out var e) ? e.Encounters.ToArray() : Array.Empty<Encounter>());

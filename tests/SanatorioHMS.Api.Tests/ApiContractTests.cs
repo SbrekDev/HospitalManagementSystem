@@ -31,10 +31,10 @@ public sealed class ApiContractTests : IClassFixture<WebApplicationFactory<Progr
     [Fact]
     public async Task Duplicate_document_returns_conflict_problem_details()
     {
-        var login = await client.PostAsJsonAsync("/api/v1/auth/login", new LoginRequest("admin@sanatorio.local", "Admin123!"));
+        var login = await client.PostAsJsonAsync("/api/v1/auth/login", new LoginRequest("admin", "Admin123!"));
         var auth = await login.Content.ReadFromJsonAsync<AuthResponse>();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", auth!.AccessToken);
-        var request = new { name = "Ana", surname = "Pérez", dateOfBirth = "1990-01-01", documentType = 0, documentNumber = "DUP-001" };
+        var request = new { name = "Ana", surname = "Pérez", dateOfBirth = "1990-01-01", documentType = 0, documentNumber = $"DUP-{Guid.NewGuid():N}" };
         Assert.Equal(HttpStatusCode.Created, (await client.PostAsJsonAsync("/api/v1/patients", request)).StatusCode);
         var duplicate = await client.PostAsJsonAsync("/api/v1/patients", request);
         Assert.Equal(HttpStatusCode.Conflict, duplicate.StatusCode);

@@ -23,6 +23,7 @@ public sealed record GetOrders(Guid EpisodeId) : IRequest<Result<IReadOnlyList<O
 
 public interface IClinicalCareRepository : IRepository<Episode>
 {
+    Task<IReadOnlyList<Episode>> GetEpisodesAsync(CancellationToken ct = default);
     Task<IReadOnlyList<Encounter>> GetEncountersAsync(Guid episodeId, CancellationToken ct = default);
     Task<IReadOnlyList<Order>> GetOrdersAsync(Guid episodeId, CancellationToken ct = default);
     Task<bool> HasIncompleteRequiredOrdersAsync(Guid episodeId, CancellationToken ct = default);

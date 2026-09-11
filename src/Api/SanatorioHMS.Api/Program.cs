@@ -26,6 +26,7 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssemblies(typeof(CreatePatient).Assembly, typeof(Login).Assembly, typeof(OpenEpisode).Assembly, typeof(GetStudies).Assembly, typeof(ReserveTurn).Assembly);
     cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
     cfg.AddOpenBehavior(typeof(AuthorizationBehavior<,>));
+    cfg.AddOpenBehavior(typeof(PersistenceBehavior<,>));
 });
 var jwt = builder.Configuration.GetSection("Jwt").Get<ApiJwtOptions>() ?? new ApiJwtOptions();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

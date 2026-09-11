@@ -24,7 +24,7 @@ public static class InfrastructureRegistration
         services.AddScoped<IClinicalCareRepository, ClinicalCareRepository>();
         services.AddScoped<IDiagnosticsRepository, DiagnosticsRepository>();
         services.AddScoped<IUserAuthRepository, AuthRepository>();
-        services.AddScoped<IUnitOfWork, RequestUnitOfWork>();
+        services.AddScoped<SanatorioHMS.Application.Core.IUnitOfWork, RequestUnitOfWork>();
         return services;
     }
 }
@@ -34,7 +34,7 @@ public sealed class RequestUnitOfWork(
     SchedulingDbContext scheduling,
     ClinicalCareDbContext clinical,
     DiagnosticsDbContext diagnostics,
-    AuthDbContext auth) : IUnitOfWork
+    AuthDbContext auth) : SanatorioHMS.Application.Core.IUnitOfWork
 {
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

@@ -13,6 +13,31 @@ public interface IAuditWriter
     Task WriteAsync(string action, string target, string outcome, CancellationToken cancellationToken = default);
 }
 
+public interface IUnitOfWork
+{
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+}
+
+public sealed class PersistenceBehavior<TRequest, TResponse>(IUnitOfWork unitOfWork)
+    : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+{
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    {
+        var response = await next();
+        try
+        {
+            await unitOfWork.SaveChangesAsync(cancellationToken);
+            return response;
+        }
+        catch (Exception exception) when (exception.GetType().Name == "DbUpdateException" && typeof(TResponse).IsGenericType && typeof(TResponse).GetGenericTypeDefinition() == typeof(Result<>))
+        {
+            var valueType = typeof(TResponse).GetGenericArguments()[0];
+            var resultType = typeof(Result<>).MakeGenericType(valueType);
+            return (TResponse)resultType.GetMethod(nameof(Result<object>.Failure))!.Invoke(null, ["Conflict."])!;
+        }
+    }
+}
+
 public sealed class ValidationBehavior<TRequest, TResponse>(IEnumerable<FluentValidation.IValidator<TRequest>> validators)
     : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {

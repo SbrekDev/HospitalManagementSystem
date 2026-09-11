@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using SanatorioHMS.Api;
 using SanatorioHMS.Application.Auth;
@@ -65,7 +66,7 @@ public sealed class ApiServiceCoverageTests
     {
         var options = Options.Create(new ApiJwtOptions());
         var user = new User(Guid.NewGuid(), "admin");
-        user.SetPasswordHash(InMemoryStore.Hash("secret"));
+        user.SetPasswordHash(new PasswordHasher<User>().HashPassword(user, "secret"));
         var credentials = new ApiCredentialService();
         Assert.True(credentials.Verify(user, "secret"));
         Assert.False(credentials.Verify(user, "wrong"));

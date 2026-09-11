@@ -31,6 +31,7 @@ public sealed class PatientRepository(PatientRegistryDbContext db) : Repository<
 }
 public sealed class SchedulingRepository(SchedulingDbContext db) : Repository<Agenda>(db), ISchedulingRepository
 {
+    public async Task<IReadOnlyList<Agenda>> GetAgendasAsync(CancellationToken cancellationToken = default) => await db.Set<Agenda>().AsNoTracking().ToListAsync(cancellationToken);
     public async Task<IReadOnlyList<DateTime>> GetAvailableSlotsAsync(Guid agendaId, CancellationToken cancellationToken = default)
     {
         var agenda = await db.Set<Agenda>().FirstOrDefaultAsync(x => x.Id == agendaId, cancellationToken);
@@ -50,6 +51,7 @@ public sealed class SchedulingRepository(SchedulingDbContext db) : Repository<Ag
 }
 public sealed class ClinicalCareRepository(ClinicalCareDbContext db) : Repository<Episode>(db), IClinicalCareRepository
 {
+    public async Task<IReadOnlyList<Episode>> GetEpisodesAsync(CancellationToken cancellationToken = default) => await db.Set<Episode>().AsNoTracking().ToListAsync(cancellationToken);
     public async Task<IReadOnlyList<Encounter>> GetEncountersAsync(Guid episodeId, CancellationToken cancellationToken = default) =>
         await db.Set<Encounter>().Where(x => x.EpisodioId == episodeId).ToListAsync(cancellationToken);
 
@@ -108,6 +110,7 @@ public sealed class AuthRepository(AuthDbContext db) : Repository<User>(db), IUs
 }
 public sealed class TurnRepository(SchedulingDbContext db) : Repository<Turno>(db), ITurnRepository
 {
+    public async Task<IReadOnlyList<Turno>> GetTurnsAsync(CancellationToken cancellationToken = default) => await db.Set<Turno>().AsNoTracking().ToListAsync(cancellationToken);
     public Task<Turno?> FindSlotAsync(Guid agendaId, DateTime start, CancellationToken cancellationToken = default) =>
         db.Set<Turno>().FromSqlInterpolated($"SELECT * FROM [sched].[Turns] WITH (UPDLOCK, ROWLOCK) WHERE [AgendaId] = {agendaId} AND [FechaHora] = {start}").SingleOrDefaultAsync(cancellationToken);
 }
