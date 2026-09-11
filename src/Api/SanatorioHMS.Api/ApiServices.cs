@@ -104,9 +104,9 @@ public sealed class InMemoryStore : IPatientRegistryRepository, ISchedulingRepos
     public static string Hash(string value) => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(value)));
 }
 
-public sealed class ApiCredentialService : IUserCredentialService
+public sealed class ApiCredentialService(IPasswordHasher<User> hasher) : IUserCredentialService
 {
-    public bool Verify(User user, string password) => user.PasswordHash == InMemoryStore.Hash(password);
+    public bool Verify(User user, string password) => hasher.VerifyHashedPassword(user, user.PasswordHash, password) == PasswordVerificationResult.Success;
     public Task<bool> ResetAsync(User user, string token, string newPassword, CancellationToken ct = default) => Task.FromResult(false);
 }
 
