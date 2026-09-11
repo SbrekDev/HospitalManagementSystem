@@ -76,10 +76,10 @@ jobs:
           # A source line can occur in every test project's report. Keep one
           # entry per product project, source filename, and line number, and
           # treat it as covered when any report records hits for that line.
-          $lines = @{}
-          foreach ($project in $thresholds.Keys) {
-            $lines[$project] = @{}
-          }
+          # Keep one flat entry per product project, source filename, and line
+          # number. A flat hashtable avoids nested-hashtable member binding
+          # issues in Windows PowerShell 5.1.
+          $coverage = @{}
 
           foreach ($report in $reports) {
             [xml]$xml = Get-Content -LiteralPath $report.FullName
@@ -96,10 +96,8 @@ jobs:
                 $lineNumber = [int]$line.number
                 $key = "{0}|{1}|{2}" -f $project, $filename, $lineNumber
                 $covered = [int]$line.hits -gt 0
-                if (-not $lines[$project].ContainsKey($key)) {
-                  $lines[$project][$key] = $covered
-                } elseif ($covered) {
-                  $lines[$project][$key] = $true
+                if (-not $coverage.ContainsKey($key) -or $covered) {
+                  $coverage[$key] = $covered
                 }
               }
             }
@@ -107,7 +105,11 @@ jobs:
 
           $failed = $false
           foreach ($project in $thresholds.Keys | Sort-Object) {
-            $projectLines = @($lines[$project].Values)
+            $projectLines = @(
+              $coverage.Keys |
+                Where-Object { $_.StartsWith("$project|") } |
+                ForEach-Object { $coverage[$_] }
+            )
             $total = $projectLines.Count
             $covered = @($projectLines | Where-Object { $_ -eq $true }).Count
             $percent = if ($total -gt 0) { 100 * $covered / $total } else { 0 }
