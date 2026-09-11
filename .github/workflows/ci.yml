@@ -45,7 +45,7 @@ jobs:
       - name: Enforce stratified project coverage
         shell: pwsh
         run: |
-          [System.Collections.Generic.Dictionary[string, int]]$thresholds = @{
+          $thresholds = @{
             'SanatorioHMS.Domain.Core' = 60
             'SanatorioHMS.Domain.Scheduling' = 45
             'SanatorioHMS.Domain.ClinicalCare' = 50
