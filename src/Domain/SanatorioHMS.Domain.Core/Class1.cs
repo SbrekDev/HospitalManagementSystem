@@ -20,6 +20,14 @@ public abstract class AggregateRoot<TId> : Entity<TId> where TId : notnull
     }
 }
 
+public interface IRepository<T> where T : class
+{
+    Task<T?> GetByIdAsync(object id, CancellationToken cancellationToken = default);
+    Task AddAsync(T entity, CancellationToken cancellationToken = default);
+    void Update(T entity);
+    void Remove(T entity);
+}
+
 public abstract record ValueObject
 {
     protected abstract IEnumerable<object?> GetEqualityComponents();

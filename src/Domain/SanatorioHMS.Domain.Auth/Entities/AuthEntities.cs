@@ -11,11 +11,13 @@ public sealed class User : AggregateRoot<Guid>
 {
     public User(Guid id, string username) : base(id) { if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("Username is required."); Username = username.Trim(); }
     public string Username { get; }
+    public string PasswordHash { get; private set; } = string.Empty;
     public bool IsActive { get; private set; } = true;
     public ICollection<UserRole> UserRoles { get; } = new List<UserRole>();
     public ICollection<Session> Sessions { get; } = new List<Session>();
     public void Disable() => IsActive = false;
     public void Enable() => IsActive = true;
+    public void SetPasswordHash(string passwordHash) => PasswordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash));
     public void AssignRole(Role role) { if (UserRoles.All(x => x.RoleId != role.Id)) UserRoles.Add(new UserRole(Id, role.Id)); }
 }
 
@@ -37,12 +39,14 @@ public sealed record UserRole(Guid UserId, Guid RoleId);
 
 public sealed class Session : Entity<Guid>
 {
-    public Session(Guid id, Guid userId, DateTime expiresAt) : base(id) { UserId = userId; ExpiresAt = expiresAt; }
+    public Session(Guid id, Guid userId, DateTime expiresAt, string? refreshTokenHash = null) : base(id) { UserId = userId; ExpiresAt = expiresAt; RefreshTokenHash = refreshTokenHash; }
     public Guid UserId { get; }
-    public DateTime ExpiresAt { get; }
+    public DateTime ExpiresAt { get; private set; }
     public bool IsRevoked { get; private set; }
+    public string? RefreshTokenHash { get; private set; }
     public bool IsValid(DateTime now) => !IsRevoked && ExpiresAt > now;
     public void Revoke() => IsRevoked = true;
+    public void Rotate(string refreshTokenHash, DateTime expiresAt) { RefreshTokenHash = refreshTokenHash; ExpiresAt = expiresAt; }
 }
 
 public sealed class AuditLog : AggregateRoot<Guid>
