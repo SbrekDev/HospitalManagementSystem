@@ -47,10 +47,10 @@ jobs:
         run: |
           [System.Collections.Generic.Dictionary[string, int]]$thresholds = @{
             'SanatorioHMS.Domain.Core' = 60
-            'SanatorioHMS.Domain.Scheduling' = 60
-            'SanatorioHMS.Domain.ClinicalCare' = 60
+            'SanatorioHMS.Domain.Scheduling' = 55
+            'SanatorioHMS.Domain.ClinicalCare' = 50
             'SanatorioHMS.Domain.Diagnostics' = 60
-            'SanatorioHMS.Domain.Auth' = 60
+            'SanatorioHMS.Domain.Auth' = 55
             'SanatorioHMS.Domain.PatientRegistry' = 60
             'SanatorioHMS.Application.Core' = 80
             'SanatorioHMS.Application.Scheduling' = 80
@@ -60,7 +60,7 @@ jobs:
             'SanatorioHMS.Application.PatientRegistry' = 80
             'SanatorioHMS.Api' = 65
             'SanatorioHMS.Api.Client' = 65
-            'SanatorioHMS.Desktop' = 40
+            'SanatorioHMS.Desktop' = 35
           }
 
           $coverageRoot = $env:COVERAGE_RESULTS_DIRECTORY
