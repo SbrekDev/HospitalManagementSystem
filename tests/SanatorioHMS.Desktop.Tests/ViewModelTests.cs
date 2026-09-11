@@ -4,6 +4,8 @@ using SanatorioHMS.Api.Client;
 using SanatorioHMS.Application.PatientRegistry;
 using SanatorioHMS.Application.Scheduling;
 using SanatorioHMS.Desktop.ViewModels;
+using SanatorioHMS.Application.ClinicalCare;
+using SanatorioHMS.Domain.Diagnostics.Entities;
 using Xunit;
 
 namespace SanatorioHMS.Desktop.Tests;
@@ -34,6 +36,25 @@ public sealed class ViewModelTests
         await vm.ReserveCommand.ExecuteAsync(null);
         Assert.False(vm.CanReserve);
         Assert.Contains("ocupado", vm.ErrorMessage);
+    }
+
+    [Fact]
+    public void ClosedEpisodeDisablesClinicalEditing()
+    {
+        using var http = new HttpClient(new StubHandler(HttpStatusCode.OK, "{}")) { BaseAddress = new Uri("https://test/") };
+        var vm = new EpisodeWorkspaceViewModel(new HmsApiClient(http)) { Episode = new EpisodeResponse(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), "Cerrado", DateTime.UtcNow) };
+        Assert.False(vm.CanEdit);
+    }
+
+    [Theory]
+    [InlineData(AuthorizationStatus.Pending)]
+    [InlineData(AuthorizationStatus.Denied)]
+    public void PendingOrDeniedAuthorizationDisablesFulfillment(AuthorizationStatus authorization)
+    {
+        using var http = new HttpClient(new StubHandler(HttpStatusCode.OK, "{}")) { BaseAddress = new Uri("https://test/") };
+        var vm = new LabTechResultRegistrationViewModel(new HmsApiClient(http)) { Authorization = authorization };
+        Assert.False(vm.CanFulfill);
+        Assert.Contains(authorization.ToString(), vm.FulfillmentReason);
     }
 
     private sealed class StubHandler(HttpStatusCode status, string detail) : HttpMessageHandler
