@@ -32,12 +32,15 @@ jobs:
 
       - name: Test with coverage
         run: >-
+          $coverageRoot = Join-Path $PWD ("TestResults\run-{0}" -f (Get-Date -Format 'yyyyMMddHHmmssfff'));
+          New-Item -ItemType Directory -Path $coverageRoot -Force | Out-Null;
+          "COVERAGE_RESULTS_DIRECTORY=$coverageRoot" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append;
           dotnet test src/SanatorioHMS.sln
           --configuration Release
           --no-build
           --collect:"XPlat Code Coverage"
           -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
-          --results-directory ./TestResults
+          --results-directory $coverageRoot
 
       - name: Enforce stratified project coverage
         shell: pwsh
@@ -60,14 +63,22 @@ jobs:
             'SanatorioHMS.Desktop' = 40
           }
 
-          $reports = Get-ChildItem -Path TestResults -Filter coverage.cobertura.xml -Recurse -File
-          if ($reports.Count -eq 0) {
-            throw 'No Cobertura report found under TestResults.'
+          $coverageRoot = $env:COVERAGE_RESULTS_DIRECTORY
+          if ([string]::IsNullOrWhiteSpace($coverageRoot) -or -not (Test-Path -LiteralPath $coverageRoot)) {
+            throw 'The current run coverage directory was not found.'
           }
 
-          $coverage = @{}
+          $reports = Get-ChildItem -Path $coverageRoot -Filter coverage.cobertura.xml -Recurse -File
+          if ($reports.Count -eq 0) {
+            throw "No Cobertura report found under $coverageRoot."
+          }
+
+          # A source line can occur in every test project's report. Keep one
+          # entry per product project, source filename, and line number, and
+          # treat it as covered when any report records hits for that line.
+          $lines = @{}
           foreach ($project in $thresholds.Keys) {
-            $coverage[$project] = @{ Covered = 0; Total = 0 }
+            $lines[$project] = @{}
           }
 
           foreach ($report in $reports) {
@@ -81,19 +92,28 @@ jobs:
               if (-not $project) { continue }
 
               foreach ($line in $class.SelectNodes('./lines/line')) {
-                $coverage[$project].Total++
-                if ([int]$line.hits -gt 0) { $coverage[$project].Covered++ }
+                $filename = ([string]$class.filename).Trim().Replace('\', '/').ToLowerInvariant()
+                $lineNumber = [int]$line.number
+                $key = "{0}|{1}|{2}" -f $project, $filename, $lineNumber
+                $covered = [int]$line.hits -gt 0
+                if (-not $lines[$project].ContainsKey($key)) {
+                  $lines[$project][$key] = $covered
+                } elseif ($covered) {
+                  $lines[$project][$key] = $true
+                }
               }
             }
           }
 
           $failed = $false
           foreach ($project in $thresholds.Keys | Sort-Object) {
-            $result = $coverage[$project]
-            $percent = if ($result.Total -gt 0) { 100 * $result.Covered / $result.Total } else { 0 }
+            $projectLines = @($lines[$project].Values)
+            $total = $projectLines.Count
+            $covered = @($projectLines | Where-Object { $_ -eq $true }).Count
+            $percent = if ($total -gt 0) { 100 * $covered / $total } else { 0 }
             $threshold = $thresholds[$project]
             $status = if ($percent -ge $threshold) { 'PASS' } else { 'FAIL' }
-            Write-Host ("{0}: {1} ({2}/{3}), threshold {4}% [{5}]" -f $project, $percent.ToString('F2'), $result.Covered, $result.Total, $threshold, $status)
+            Write-Host ("{0}: {1} ({2}/{3}), threshold {4}% [{5}]" -f $project, $percent.ToString('F2'), $covered, $total, $threshold, $status)
             if ($percent -lt $threshold) { $failed = $true }
           }
 
