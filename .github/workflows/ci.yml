@@ -31,16 +31,22 @@ jobs:
         run: dotnet format src/SanatorioHMS.sln --verify-no-changes --no-restore
 
       - name: Test with coverage
-        run: >-
-          $coverageRoot = Join-Path $PWD ("TestResults\run-{0}" -f (Get-Date -Format 'yyyyMMddHHmmssfff'));
-          New-Item -ItemType Directory -Path $coverageRoot -Force | Out-Null;
-          "COVERAGE_RESULTS_DIRECTORY=$coverageRoot" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append;
-          dotnet test src/SanatorioHMS.sln
-          --configuration Release
-          --no-build
-          --collect:"XPlat Code Coverage"
-          -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
-          --results-directory $coverageRoot
+        shell: pwsh
+        run: |
+          $coverageRoot = Join-Path $env:GITHUB_WORKSPACE ("TestResults\run-{0}" -f (Get-Date -Format 'yyyyMMddHHmmssfff'))
+          New-Item -ItemType Directory -Path $coverageRoot -Force | Out-Null
+          "COVERAGE_RESULTS_DIRECTORY=$coverageRoot" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+          $testArguments = @(
+            'src/SanatorioHMS.sln'
+            '--configuration', 'Release'
+            '--no-build'
+            '--collect:XPlat Code Coverage'
+            '--results-directory', $coverageRoot
+            '--'
+            'DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
+          )
+          dotnet test @testArguments
 
       - name: Enforce stratified project coverage
         shell: pwsh
